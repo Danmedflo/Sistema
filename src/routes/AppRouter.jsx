@@ -13,15 +13,13 @@ import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 
 function AppRouter() {
-  const isAuthenticated = true;
-
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path="/login"
           element={
-            <PublicRoute isAuthenticated={isAuthenticated}>
+            <PublicRoute>
               <Login />
             </PublicRoute>
           }
@@ -30,7 +28,7 @@ function AppRouter() {
         <Route
           path="/register"
           element={
-            <PublicRoute isAuthenticated={isAuthenticated}>
+            <PublicRoute>
               <Register />
             </PublicRoute>
           }
@@ -39,7 +37,7 @@ function AppRouter() {
         <Route
           path="/dashboard"
           element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
+            <PrivateRoute>
               <MainLayout />
             </PrivateRoute>
           }

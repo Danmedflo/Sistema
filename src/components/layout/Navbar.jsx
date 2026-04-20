@@ -1,8 +1,27 @@
-import { FaMoon, FaSun } from "react-icons/fa6";
+import { FaMoon, FaSun, FaRightFromBracket } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 import useTheme from "../../hooks/useTheme";
+import useAuth from "../../hooks/useAuth";
 
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const { error } = await signOut();
+
+    if (!error) {
+      navigate("/login");
+    }
+  };
+
+  const displayName =
+    user?.user_metadata?.name ||
+    user?.email?.split("@")[0] ||
+    "Usuario";
+
+  const initial = displayName.charAt(0).toUpperCase();
 
   return (
     <header className="navbar">
@@ -17,12 +36,16 @@ function Navbar() {
         </button>
 
         <div className="navbar-user">
-          <div className="navbar-avatar">L</div>
+          <div className="navbar-avatar">{initial}</div>
           <div>
-            <strong>Loki</strong>
-            <p>Usuario demo</p>
+            <strong>{displayName}</strong>
+            <p>{user?.email || "Usuario autenticado"}</p>
           </div>
         </div>
+
+        <button className="logout-btn" onClick={handleLogout}>
+          <FaRightFromBracket />
+        </button>
       </div>
     </header>
   );

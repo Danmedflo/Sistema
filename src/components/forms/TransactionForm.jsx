@@ -13,6 +13,9 @@ function TransactionForm({ onAddTransaction, onClose }) {
     category: "",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const categoryOptions = useMemo(() => {
     const filtered = mockCategories.filter(
       (item) => item.type === formData.type
@@ -46,11 +49,12 @@ function TransactionForm({ onAddTransaction, onClose }) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
+    setIsSubmitting(true);
 
     const newTransaction = {
-      id: Date.now(),
       description: formData.description,
       amount: Number(formData.amount),
       date: formData.date,
@@ -58,7 +62,13 @@ function TransactionForm({ onAddTransaction, onClose }) {
       category: formData.category,
     };
 
-    onAddTransaction(newTransaction);
+    const result = await onAddTransaction(newTransaction);
+
+    if (!result.success) {
+      setErrorMessage(result.message || "No se pudo guardar la transacción.");
+      setIsSubmitting(false);
+      return;
+    }
 
     setFormData({
       description: "",
@@ -68,6 +78,7 @@ function TransactionForm({ onAddTransaction, onClose }) {
       category: "",
     });
 
+    setIsSubmitting(false);
     onClose();
   };
 
@@ -75,38 +86,39 @@ function TransactionForm({ onAddTransaction, onClose }) {
     <form className="transaction-form" onSubmit={handleSubmit}>
       <Input
         id="description"
+        name="description"
         label="Descripción"
         value={formData.description}
         onChange={handleChange}
         placeholder="Ej. Pago de internet"
         required
         type="text"
-        name="description"
       />
 
       <Input
         id="amount"
+        name="amount"
         label="Monto"
         type="number"
         value={formData.amount}
         onChange={handleChange}
         placeholder="Ej. 150"
         required
-        name="amount"
       />
 
       <Input
         id="date"
+        name="date"
         label="Fecha"
         type="date"
         value={formData.date}
         onChange={handleChange}
         required
-        name="date"
       />
 
       <Select
         id="type"
+        name="type"
         label="Tipo"
         value={formData.type}
         onChange={handleChange}
@@ -115,24 +127,30 @@ function TransactionForm({ onAddTransaction, onClose }) {
           { value: "Gasto", label: "Gasto" },
           { value: "Ingreso", label: "Ingreso" },
         ]}
-        name="type"
       />
 
       <Select
         id="category"
+        name="category"
         label="Categoría"
         value={formData.category}
         onChange={handleChange}
         required
         options={categoryOptions}
-        name="category"
       />
+
+      {errorMessage && (
+        <p className="form-error-message">{errorMessage}</p>
+      )}
 
       <div className="transaction-form-actions">
         <Button type="button" variant="secondary" onClick={onClose}>
           Cancelar
         </Button>
-        <Button type="submit">Guardar movimiento</Button>
+
+        <Button type="submit">
+          {isSubmitting ? "Guardando..." : "Guardar movimiento"}
+        </Button>
       </div>
     </form>
   );

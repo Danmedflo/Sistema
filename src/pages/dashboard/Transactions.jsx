@@ -1,21 +1,48 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaPlus, FaFilter } from "react-icons/fa6";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import Select from "../../components/ui/Select";
 import TransactionForm from "../../components/forms/TransactionForm";
-import { mockTransactions as initialTransactions } from "../../data/mockTransactions";
 import { formatCurrency } from "../../utils/formatCurrency";
+import { getTransactions, createTransaction } from "../../services/transactionService";
+import useAuth from "../../hooks/useAuth";
 
 function Transactions() {
-  const [transactions, setTransactions] = useState(initialTransactions);
+  const { user } = useAuth();
+
+  const [transactions, setTransactions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [pageError, setPageError] = useState("");
 
   const [filters, setFilters] = useState({
     search: "",
     type: "",
   });
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      if (!user?.id) return;
+
+      setIsLoading(true);
+      setPageError("");
+
+      const { data, error } = await getTransactions(user.id);
+
+      if (error) {
+        setPageError("No se pudieron cargar las transacciones.");
+        setIsLoading(false);
+        return;
+      }
+
+      setTransactions(data || []);
+      setIsLoading(false);
+    };
+
+    fetchTransactions();
+  }, [user?.id]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -38,8 +65,26 @@ function Transactions() {
     });
   }, [transactions, filters]);
 
-  const handleAddTransaction = (newTransaction) => {
-    setTransactions((prev) => [newTransaction, ...prev]);
+  const handleAddTransaction = async (newTransaction) => {
+    const payload = {
+      ...newTransaction,
+      user_id: user.id,
+    };
+
+    const { data, error } = await createTransaction(payload);
+
+    if (error) {
+      return {
+        success: false,
+        message: error.message || "No se pudo guardar la transacción.",
+      };
+    }
+
+    if (data?.length) {
+      setTransactions((prev) => [data[0], ...prev]);
+    }
+
+    return { success: true };
   };
 
   return (
@@ -97,50 +142,56 @@ function Transactions() {
           </span>
         </div>
 
-        <div className="transactions-table-wrapper">
-          <table className="transactions-table">
-            <thead>
-              <tr>
-                <th>Descripción</th>
-                <th>Categoría</th>
-                <th>Fecha</th>
-                <th>Tipo</th>
-                <th style={{ textAlign: "right" }}>Monto</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredTransactions.length > 0 ? (
-                filteredTransactions.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.description}</td>
-                    <td>{item.category}</td>
-                    <td>{item.date}</td>
-                    <td>
-                      <span
-                        className={
-                          item.type === "Ingreso"
-                            ? "badge badge-income"
-                            : "badge badge-expense"
-                        }
-                      >
-                        {item.type}
-                      </span>
-                    </td>
-                    <td style={{ textAlign: "right", fontWeight: 700 }}>
-                      {formatCurrency(item.amount)}
+        {isLoading ? (
+          <p>Cargando transacciones...</p>
+        ) : pageError ? (
+          <p className="form-error-message">{pageError}</p>
+        ) : (
+          <div className="transactions-table-wrapper">
+            <table className="transactions-table">
+              <thead>
+                <tr>
+                  <th>Descripción</th>
+                  <th>Categoría</th>
+                  <th>Fecha</th>
+                  <th>Tipo</th>
+                  <th style={{ textAlign: "right" }}>Monto</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredTransactions.length > 0 ? (
+                  filteredTransactions.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.description}</td>
+                      <td>{item.category}</td>
+                      <td>{item.date}</td>
+                      <td>
+                        <span
+                          className={
+                            item.type === "Ingreso"
+                              ? "badge badge-income"
+                              : "badge badge-expense"
+                          }
+                        >
+                          {item.type}
+                        </span>
+                      </td>
+                      <td style={{ textAlign: "right", fontWeight: 700 }}>
+                        {formatCurrency(item.amount)}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="empty-row">
+                      Aún no tienes transacciones registradas.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="empty-row">
-                    No se encontraron movimientos con esos filtros.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
 
       <Modal

@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import {
   FaWallet,
   FaArrowTrendUp,
@@ -8,44 +9,122 @@ import StatCard from "../../components/ui/StatCard";
 import RecentTransactions from "../../components/ui/RecentTransactions";
 import IncomeExpenseChart from "../../components/charts/IncomeExpenseChart";
 import CategoryChart from "../../components/charts/CategoryChart";
-import { mockStats } from "../../data/mockStats";
+import { getTransactions } from "../../services/transactionService";
+import useAuth from "../../hooks/useAuth";
+import {
+  groupTransactionsByMonth,
+  groupExpensesByCategory,
+} from "../../utils/chartHelpers";
 
 function Home() {
+  const { user } = useAuth();
+
+  const [transactions, setTransactions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [pageError, setPageError] = useState("");
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      if (!user?.id) return;
+
+      setIsLoading(true);
+      setPageError("");
+
+      const { data, error } = await getTransactions(user.id);
+
+      if (error) {
+        setPageError("No se pudo cargar el dashboard.");
+        setIsLoading(false);
+        return;
+      }
+
+      setTransactions(data || []);
+      setIsLoading(false);
+    };
+
+    fetchTransactions();
+  }, [user?.id]);
+
+  const totals = useMemo(() => {
+    const income = transactions
+      .filter((item) => item.type === "Ingreso")
+      .reduce((acc, item) => acc + Number(item.amount), 0);
+
+    const expense = transactions
+      .filter((item) => item.type === "Gasto")
+      .reduce((acc, item) => acc + Number(item.amount), 0);
+
+    return {
+      totalBalance: income - expense,
+      monthlyIncome: income,
+      monthlyExpenses: expense,
+      monthlySavings: income - expense,
+    };
+  }, [transactions]);
+
+  const monthlyData = useMemo(() => {
+    return groupTransactionsByMonth(transactions);
+  }, [transactions]);
+
+  const categoryData = useMemo(() => {
+    return groupExpensesByCategory(transactions);
+  }, [transactions]);
+
+  const recentTransactions = useMemo(() => {
+    return [...transactions].slice(0, 5);
+  }, [transactions]);
+
+  if (isLoading) {
+    return (
+      <section className="panel-card">
+        <p>Cargando dashboard...</p>
+      </section>
+    );
+  }
+
+  if (pageError) {
+    return (
+      <section className="panel-card">
+        <p className="form-error-message">{pageError}</p>
+      </section>
+    );
+  }
+
   return (
     <div className="dashboard-home">
       <section className="stats-grid">
         <StatCard
           title="Saldo total"
-          amount={mockStats.totalBalance}
+          amount={totals.totalBalance}
           icon={<FaWallet />}
           variant="primary"
         />
         <StatCard
-          title="Ingresos del mes"
-          amount={mockStats.monthlyIncome}
+          title="Ingresos acumulados"
+          amount={totals.monthlyIncome}
           icon={<FaArrowTrendUp />}
           variant="success"
         />
         <StatCard
-          title="Gastos del mes"
-          amount={mockStats.monthlyExpenses}
+          title="Gastos acumulados"
+          amount={totals.monthlyExpenses}
           icon={<FaArrowTrendDown />}
           variant="danger"
         />
         <StatCard
-          title="Ahorro del mes"
-          amount={mockStats.monthlySavings}
+          title="Balance total"
+          amount={totals.monthlySavings}
           icon={<FaPiggyBank />}
           variant="warning"
         />
       </section>
 
       <section className="charts-grid">
-        <IncomeExpenseChart />
-        <CategoryChart />
+        <IncomeExpenseChart data={monthlyData} />
+        <CategoryChart data={categoryData} />
       </section>
 
-      <RecentTransactions />
+      <RecentTransactions transactions={recentTransactions} />
     </div>
   );
 }

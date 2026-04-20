@@ -20,31 +20,32 @@ ChartJS.register(
   Filler
 );
 
-function IncomeExpenseChart() {
-  const data = {
-    labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+function IncomeExpenseChart({ data = [] }) {
+  const chartData = {
+    labels: data.map((item) => item.month),
     datasets: [
       {
         label: "Ingresos",
-        data: [1800, 2200, 2100, 3200, 2800, 3500],
+        data: data.map((item) => item.income),
         borderColor: "#16a34a",
-        backgroundColor: "rgba(22, 163, 74, 0.15)",
+        backgroundColor: "rgba(22, 163, 74, 0.12)",
         fill: true,
-        tension: 0.4,
+        tension: 0.35,
       },
       {
         label: "Gastos",
-        data: [900, 1200, 1100, 1350, 1400, 1700],
+        data: data.map((item) => item.expense),
         borderColor: "#dc2626",
         backgroundColor: "rgba(220, 38, 38, 0.12)",
         fill: true,
-        tension: 0.4,
+        tension: 0.35,
       },
     ],
   };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top",
@@ -57,8 +58,9 @@ function IncomeExpenseChart() {
       <div className="panel-card-header">
         <h3>Ingresos vs gastos</h3>
       </div>
+
       <div style={{ height: "300px" }}>
-        <Line data={data} options={{ ...options, maintainAspectRatio: false }} />
+        <Line data={chartData} options={options} />
       </div>
     </section>
   );
