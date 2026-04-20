@@ -1,0 +1,42 @@
+export const mockTransactions = [
+  {
+    id: 1,
+    type: "Ingreso",
+    category: "Salario",
+    description: "Pago mensual",
+    amount: 2500,
+    date: "2026-04-01",
+  },
+  {
+    id: 2,
+    type: "Gasto",
+    category: "Comida",
+    description: "Almuerzo en restaurante",
+    amount: 35.5,
+    date: "2026-04-03",
+  },
+  {
+    id: 3,
+    type: "Gasto",
+    category: "Transporte",
+    description: "Taxi al trabajo",
+    amount: 18,
+    date: "2026-04-04",
+  },
+  {
+    id: 4,
+    type: "Ingreso",
+    category: "Freelance",
+    description: "Diseño de logo",
+    amount: 450,
+    date: "2026-04-06",
+  },
+  {
+    id: 5,
+    type: "Gasto",
+    category: "Servicios",
+    description: "Pago de internet",
+    amount: 89.9,
+    date: "2026-04-08",
+  },
+];

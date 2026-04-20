@@ -5,8 +5,6 @@ function LoginForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Por ahora no hay auth real
     navigate("/dashboard");
   };
 
