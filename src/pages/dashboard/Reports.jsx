@@ -72,16 +72,27 @@ function Reports() {
       </div>
 
       {isLoading ? (
-        <section className="panel-card">
-          <p>Cargando reportes...</p>
+        <section className="panel-card status-card">
+          <div className="status-loader"></div>
+          <h3>Cargando reportes</h3>
+          <p>Estamos procesando tus transacciones y gráficos.</p>
         </section>
       ) : pageError ? (
-        <section className="panel-card">
+        <section className="panel-card status-card status-card--error">
+          <h3>No se pudieron cargar los reportes</h3>
           <p className="form-error-message">{pageError}</p>
+        </section>
+      ) : !transactions.length ? (
+        <section className="panel-card status-card">
+          <h3>No hay datos para reportes</h3>
+          <p>
+            Cuando registres transacciones, aquí verás tendencias mensuales,
+            distribución por categorías y balances acumulados.
+          </p>
         </section>
       ) : (
         <>
-          <section className="stats-grid">
+          <section className="stats-grid stats-grid--reports">
             <article className="stat-card">
               <div className="stat-card-top">
                 <span className="stat-card-title">Ingresos acumulados</span>

@@ -1,20 +1,40 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
 import Button from "../ui/Button";
 import { mockCategories } from "../../data/mockCategories";
 
-function TransactionForm({ onAddTransaction, onClose }) {
-  const [formData, setFormData] = useState({
-    description: "",
-    amount: "",
-    date: "",
-    type: "Gasto",
-    category: "",
-  });
+const initialState = {
+  description: "",
+  amount: "",
+  date: "",
+  type: "Gasto",
+  category: "",
+};
 
+function TransactionForm({
+  onSubmitTransaction,
+  onClose,
+  initialData = null,
+  submitLabel = "Guardar movimiento",
+}) {
+  const [formData, setFormData] = useState(initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        description: initialData.description || "",
+        amount: initialData.amount ?? "",
+        date: initialData.date || "",
+        type: initialData.type || "Gasto",
+        category: initialData.category || "",
+      });
+    } else {
+      setFormData(initialState);
+    }
+  }, [initialData]);
 
   const categoryOptions = useMemo(() => {
     const filtered = mockCategories.filter(
@@ -54,29 +74,21 @@ function TransactionForm({ onAddTransaction, onClose }) {
     setErrorMessage("");
     setIsSubmitting(true);
 
-    const newTransaction = {
-      description: formData.description,
+    const payload = {
+      description: formData.description.trim(),
       amount: Number(formData.amount),
       date: formData.date,
       type: formData.type,
       category: formData.category,
     };
 
-    const result = await onAddTransaction(newTransaction);
+    const result = await onSubmitTransaction(payload);
 
     if (!result.success) {
       setErrorMessage(result.message || "No se pudo guardar la transacción.");
       setIsSubmitting(false);
       return;
     }
-
-    setFormData({
-      description: "",
-      amount: "",
-      date: "",
-      type: "Gasto",
-      category: "",
-    });
 
     setIsSubmitting(false);
     onClose();
@@ -139,9 +151,7 @@ function TransactionForm({ onAddTransaction, onClose }) {
         options={categoryOptions}
       />
 
-      {errorMessage && (
-        <p className="form-error-message">{errorMessage}</p>
-      )}
+      {errorMessage && <p className="form-error-message">{errorMessage}</p>}
 
       <div className="transaction-form-actions">
         <Button type="button" variant="secondary" onClick={onClose}>
@@ -149,7 +159,7 @@ function TransactionForm({ onAddTransaction, onClose }) {
         </Button>
 
         <Button type="submit">
-          {isSubmitting ? "Guardando..." : "Guardar movimiento"}
+          {isSubmitting ? "Guardando..." : submitLabel}
         </Button>
       </div>
     </form>

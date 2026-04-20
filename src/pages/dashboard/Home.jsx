@@ -76,16 +76,31 @@ function Home() {
 
   if (isLoading) {
     return (
-      <section className="panel-card">
-        <p>Cargando dashboard...</p>
+      <section className="panel-card status-card">
+        <div className="status-loader"></div>
+        <h3>Cargando dashboard</h3>
+        <p>Estamos trayendo tus movimientos y resumen general.</p>
       </section>
     );
   }
 
   if (pageError) {
     return (
-      <section className="panel-card">
+      <section className="panel-card status-card status-card--error">
+        <h3>Ups, algo salió mal</h3>
         <p className="form-error-message">{pageError}</p>
+      </section>
+    );
+  }
+
+  if (!transactions.length) {
+    return (
+      <section className="panel-card status-card">
+        <h3>Aún no tienes movimientos</h3>
+        <p>
+          Registra tu primera transacción para ver tu saldo, gráficos y últimas
+          operaciones aquí.
+        </p>
       </section>
     );
   }

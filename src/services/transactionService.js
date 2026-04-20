@@ -18,3 +18,24 @@ export async function createTransaction(transaction) {
 
   return { data, error };
 }
+
+export async function updateTransaction(id, updates, userId) {
+  const { data, error } = await supabase
+    .from("transactions")
+    .update(updates)
+    .eq("id", id)
+    .eq("user_id", userId)
+    .select();
+
+  return { data, error };
+}
+
+export async function deleteTransaction(id, userId) {
+  const { error } = await supabase
+    .from("transactions")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", userId);
+
+  return { error };
+}

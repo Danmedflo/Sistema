@@ -1,4 +1,5 @@
 import { formatCurrency } from "../../utils/formatCurrency";
+import EmptyState from "./EmptyState";
 
 function RecentTransactions({ transactions = [] }) {
   return (
@@ -7,20 +8,25 @@ function RecentTransactions({ transactions = [] }) {
         <h3>Últimas transacciones</h3>
       </div>
 
-      <div className="transactions-table-wrapper">
-        <table className="transactions-table">
-          <thead>
-            <tr>
-              <th>Descripción</th>
-              <th>Categoría</th>
-              <th>Fecha</th>
-              <th>Tipo</th>
-              <th style={{ textAlign: "right" }}>Monto</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.length > 0 ? (
-              transactions.map((item) => (
+      {transactions.length === 0 ? (
+        <EmptyState
+          title="Aún no tienes transacciones"
+          description="Registra tus primeros movimientos y aquí verás los más recientes."
+        />
+      ) : (
+        <div className="transactions-table-wrapper">
+          <table className="transactions-table">
+            <thead>
+              <tr>
+                <th>Descripción</th>
+                <th>Categoría</th>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th style={{ textAlign: "right" }}>Monto</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.map((item) => (
                 <tr key={item.id}>
                   <td>{item.description}</td>
                   <td>{item.category}</td>
@@ -40,17 +46,11 @@ function RecentTransactions({ transactions = [] }) {
                     {formatCurrency(item.amount)}
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="empty-row">
-                  Aún no tienes transacciones registradas.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </section>
   );
 }

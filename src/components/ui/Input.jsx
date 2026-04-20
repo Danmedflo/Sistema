@@ -7,6 +7,7 @@ function Input({
   onChange,
   placeholder,
   required = false,
+  disabled = false,
 }) {
   return (
     <div className="custom-field">
@@ -19,6 +20,7 @@ function Input({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
+        disabled={disabled}
         className="custom-input"
       />
     </div>

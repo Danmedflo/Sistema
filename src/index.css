@@ -134,10 +134,15 @@ body {
 }
 
 /* =========================
-   DASHBOARD HOME
+   DASHBOARD / HOME
 ========================= */
 
-.dashboard-home {
+.dashboard-home,
+.transactions-page,
+.categories-page,
+.profile-page,
+.settings-page,
+.reports-page {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -148,6 +153,20 @@ body {
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
+
+.stats-grid--reports {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+/* =========================
+   STAT CARDS
+========================= */
 
 .stat-card {
   background: white;
@@ -206,14 +225,8 @@ body {
   color: #d97706;
 }
 
-.charts-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
-}
-
 /* =========================
-   CARDS / TABLES / BADGES
+   GENERIC CARDS / PANELS
 ========================= */
 
 .panel-card {
@@ -245,6 +258,32 @@ body {
 .chart-card canvas {
   flex: 1;
 }
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  font-size: 1.8rem;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.page-header p {
+  color: #64748b;
+}
+
+/* =========================
+   TABLES / BADGES
+========================= */
 
 .transactions-table-wrapper {
   overflow-x: auto;
@@ -278,6 +317,18 @@ body {
   color: #334155;
 }
 
+.table-count {
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.empty-row {
+  text-align: center;
+  color: #64748b;
+  padding: 24px !important;
+}
+
 .badge {
   display: inline-block;
   padding: 6px 10px;
@@ -297,32 +348,8 @@ body {
 }
 
 /* =========================
-   TRANSACTIONS PAGE
+   FORMS / FILTERS / BUTTONS
 ========================= */
-
-.transactions-page {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.page-header h2 {
-  font-size: 1.8rem;
-  color: #0f172a;
-  margin-bottom: 6px;
-}
-
-.page-header p {
-  color: #64748b;
-}
 
 .filters-card h3 {
   display: flex;
@@ -400,16 +427,10 @@ body {
   background: #cbd5e1;
 }
 
-.table-count {
-  color: #64748b;
-  font-size: 0.95rem;
+.form-error-message {
+  color: #dc2626;
   font-weight: 600;
-}
-
-.empty-row {
-  text-align: center;
-  color: #64748b;
-  padding: 24px !important;
+  margin-top: 4px;
 }
 
 /* =========================
@@ -476,75 +497,7 @@ body {
 }
 
 /* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 1100px) {
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .charts-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .auth-box {
-    grid-template-columns: 1fr;
-  }
-
-  .auth-left {
-    display: none;
-  }
-
-  .sidebar {
-    display: none;
-  }
-
-  .navbar {
-    padding: 18px;
-  }
-
-  .dashboard-content {
-    padding: 18px;
-  }
-
-  .page-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .filters-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .transaction-form-actions {
-    flex-direction: column;
-  }
-
-  .modal-box {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 640px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .stat-card-amount {
-    font-size: 1.45rem;
-  }
-
-  .transactions-table th,
-  .transactions-table td {
-    font-size: 0.88rem;
-  }
-}
-
-/* =========================
-   NAVBAR ACTIONS / THEME
+   NAVBAR / THEME / LOGOUT
 ========================= */
 
 .navbar-actions {
@@ -553,7 +506,8 @@ body {
   gap: 16px;
 }
 
-.theme-toggle-btn {
+.theme-toggle-btn,
+.logout-btn {
   width: 42px;
   height: 42px;
   border: 1px solid #dbe3ee;
@@ -566,19 +520,14 @@ body {
   transition: 0.2s ease;
 }
 
-.theme-toggle-btn:hover {
+.theme-toggle-btn:hover,
+.logout-btn:hover {
   background: #f8fafc;
 }
 
 /* =========================
    CATEGORIES
 ========================= */
-
-.categories-page {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
 
 .categories-grid {
   display: grid;
@@ -612,12 +561,6 @@ body {
 /* =========================
    PROFILE
 ========================= */
-
-.profile-page {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
 
 .profile-card {
   display: flex;
@@ -681,12 +624,6 @@ body {
    SETTINGS
 ========================= */
 
-.settings-page {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
 .settings-card {
   display: flex;
   flex-direction: column;
@@ -711,6 +648,163 @@ body {
 .settings-actions {
   display: flex;
   gap: 12px;
+}
+
+/* =========================
+   ACTION BUTTONS / DELETE
+========================= */
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.icon-action-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #dbe3ee;
+  background: white;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: #334155;
+  transition: 0.2s ease;
+}
+
+.icon-action-btn:hover {
+  background: #f8fafc;
+}
+
+.icon-action-btn--danger {
+  color: #dc2626;
+}
+
+.icon-action-btn--danger:hover {
+  background: #fef2f2;
+}
+
+.delete-confirmation {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.delete-confirmation p {
+  color: #334155;
+  line-height: 1.5;
+}
+
+/* =========================
+   STATUS / LOADERS / EMPTY
+========================= */
+
+.status-card {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.status-card h3 {
+  font-size: 1.2rem;
+  color: #0f172a;
+}
+
+.status-card p {
+  max-width: 520px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.status-card--error {
+  border: 1px solid #fecaca;
+  background: #fff7f7;
+}
+
+.status-inline {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.status-inline p {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.status-loader {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 4px solid #dbeafe;
+  border-top-color: #2563eb;
+  animation: spin 0.9s linear infinite;
+}
+
+.status-loader--sm {
+  width: 32px;
+  height: 32px;
+  border-width: 3px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  z-index: 9999;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  animation: toast-in 0.3s ease;
+}
+
+.toast--success {
+  background: #16a34a;
+}
+
+.toast--error {
+  background: #dc2626;
+}
+
+.toast--warning {
+  background: #f59e0b;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* =========================
@@ -744,7 +838,8 @@ body.dark-theme .panel-card-header h3,
 body.dark-theme .page-header h2,
 body.dark-theme .stat-card-amount,
 body.dark-theme .profile-field strong,
-body.dark-theme .profile-top h3 {
+body.dark-theme .profile-top h3,
+body.dark-theme .status-card h3 {
   color: #f8fafc;
 }
 
@@ -755,7 +850,9 @@ body.dark-theme .profile-top p,
 body.dark-theme .profile-field span,
 body.dark-theme .category-item p,
 body.dark-theme .settings-block p,
-body.dark-theme .stat-card-title {
+body.dark-theme .stat-card-title,
+body.dark-theme .status-card p,
+body.dark-theme .status-inline p {
   color: #94a3b8;
 }
 
@@ -765,7 +862,9 @@ body.dark-theme .transactions-table tbody tr:hover,
 body.dark-theme .profile-field,
 body.dark-theme .category-item,
 body.dark-theme .custom-input,
-body.dark-theme .theme-toggle-btn {
+body.dark-theme .theme-toggle-btn,
+body.dark-theme .logout-btn,
+body.dark-theme .icon-action-btn {
   background: #0f172a;
   color: #e2e8f0;
   border-color: #1f2937;
@@ -789,7 +888,9 @@ body.dark-theme .modal-header {
   border-bottom-color: #1f2937;
 }
 
-body.dark-theme .theme-toggle-btn:hover {
+body.dark-theme .theme-toggle-btn:hover,
+body.dark-theme .logout-btn:hover,
+body.dark-theme .icon-action-btn:hover {
   background: #1f2937;
 }
 
@@ -806,13 +907,50 @@ body.dark-theme .modal-close {
   color: #94a3b8;
 }
 
+body.dark-theme .icon-action-btn--danger {
+  color: #f87171;
+}
+
+body.dark-theme .icon-action-btn--danger:hover {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+body.dark-theme .delete-confirmation p {
+  color: #e2e8f0;
+}
+
+body.dark-theme .status-card--error {
+  background: rgba(127, 29, 29, 0.16);
+  border-color: rgba(248, 113, 113, 0.28);
+}
+
+body.dark-theme .status-loader {
+  border-color: #1e3a8a;
+  border-top-color: #60a5fa;
+}
+
+body.dark-theme .toast {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
 /* =========================
-   RESPONSIVE EXTRA
+   RESPONSIVE
 ========================= */
+
+@media (max-width: 1100px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 @media (max-width: 900px) {
   .categories-grid,
-  .profile-grid {
+  .profile-grid,
+  .stats-grid--reports {
     grid-template-columns: 1fr;
   }
 
@@ -827,41 +965,74 @@ body.dark-theme .modal-close {
   }
 }
 
-.logout-btn {
-  width: 42px;
-  height: 42px;
-  border: 1px solid #dbe3ee;
-  background: white;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  color: #334155;
-  transition: 0.2s ease;
+@media (max-width: 768px) {
+  .auth-box {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-left {
+    display: none;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .navbar {
+    padding: 18px;
+  }
+
+  .dashboard-content {
+    padding: 18px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .transaction-form-actions {
+    flex-direction: column;
+  }
+
+  .modal-box {
+    max-width: 100%;
+  }
 }
 
-.logout-btn:hover {
-  background: #f8fafc;
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card-amount {
+    font-size: 1.45rem;
+  }
+
+  .transactions-table th,
+  .transactions-table td {
+    font-size: 0.88rem;
+  }
+
+  .toast {
+    top: 16px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+  }
 }
 
-body.dark-theme .logout-btn {
-  background: #0f172a;
-  color: #e2e8f0;
-  border-color: #1f2937;
+.custom-input:disabled {
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: not-allowed;
 }
 
-body.dark-theme .logout-btn:hover {
-  background: #1f2937;
-}
-
-.form-error-message {
-  color: #dc2626;
-  font-weight: 600;
-  margin-top: 4px;
-}
-
-.reports-page {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+body.dark-theme .custom-input:disabled {
+  background: #111827;
+  color: #94a3b8;
 }

@@ -6,9 +6,13 @@ import {
   FaLayerGroup,
   FaUser,
   FaGear,
+  FaXmark,
 } from "react-icons/fa6";
+import useTheme from "../../hooks/useTheme";
 
 function Sidebar() {
+  const { isSidebarOpen, closeSidebar } = useTheme();
+
   const menuItems = [
     { to: "/dashboard", label: "Inicio", icon: <FaHouse /> },
     {
@@ -23,7 +27,13 @@ function Sidebar() {
   ];
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isSidebarOpen ? "sidebar-open" : ""}`}>
+      <div className="sidebar-top-mobile">
+        <button className="sidebar-close-btn" onClick={closeSidebar}>
+          <FaXmark />
+        </button>
+      </div>
+
       <div className="sidebar-logo">
         <h2>FinControl</h2>
         <p>Mis finanzas</p>
@@ -35,6 +45,7 @@ function Sidebar() {
             key={item.to}
             to={item.to}
             end={item.to === "/dashboard"}
+            onClick={closeSidebar}
             className={({ isActive }) =>
               isActive ? "sidebar-link active" : "sidebar-link"
             }
