@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+
 import Input from "../ui/Input";
 import Select from "../ui/Select";
 import Button from "../ui/Button";
 import { mockCategories } from "../../data/mockCategories";
+
+const CUSTOM_CATEGORY_VALUE = "__custom__";
 
 const initialState = {
   description: "",
@@ -10,6 +13,7 @@ const initialState = {
   date: "",
   type: "Gasto",
   category: "",
+  customCategory: "",
 };
 
 function TransactionForm({
@@ -22,14 +26,35 @@ function TransactionForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const predefinedCategoryNames = useMemo(() => {
+    return mockCategories
+      .filter((item) => item.type === formData.type)
+      .map((item) => item.name);
+  }, [formData.type]);
+
   useEffect(() => {
     if (initialData) {
+      const type = initialData.type || "Gasto";
+
+      const categoriesByType = mockCategories
+        .filter((item) => item.type === type)
+        .map((item) => item.name);
+
+      const isPredefinedCategory = categoriesByType.includes(
+        initialData.category
+      );
+
       setFormData({
         description: initialData.description || "",
         amount: initialData.amount ?? "",
         date: initialData.date || "",
-        type: initialData.type || "Gasto",
-        category: initialData.category || "",
+        type,
+        category: isPredefinedCategory
+          ? initialData.category
+          : CUSTOM_CATEGORY_VALUE,
+        customCategory: isPredefinedCategory
+          ? ""
+          : initialData.category || "",
       });
     } else {
       setFormData(initialState);
@@ -47,6 +72,7 @@ function TransactionForm({
         value: item.name,
         label: item.name,
       })),
+      { value: CUSTOM_CATEGORY_VALUE, label: "Otra categoría" },
     ];
   }, [formData.type]);
 
@@ -59,6 +85,7 @@ function TransactionForm({
           ...prev,
           type: value,
           category: "",
+          customCategory: "",
         };
       }
 
@@ -72,6 +99,22 @@ function TransactionForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
+
+    const finalCategory =
+      formData.category === CUSTOM_CATEGORY_VALUE
+        ? formData.customCategory.trim()
+        : formData.category;
+
+    if (!finalCategory) {
+      setErrorMessage("Debes seleccionar o escribir una categoría.");
+      return;
+    }
+
+    if (Number(formData.amount) <= 0) {
+      setErrorMessage("El monto debe ser mayor a 0.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     const payload = {
@@ -79,7 +122,7 @@ function TransactionForm({
       amount: Number(formData.amount),
       date: formData.date,
       type: formData.type,
-      category: formData.category,
+      category: finalCategory,
     };
 
     const result = await onSubmitTransaction(payload);
@@ -150,6 +193,19 @@ function TransactionForm({
         required
         options={categoryOptions}
       />
+
+      {formData.category === CUSTOM_CATEGORY_VALUE && (
+        <Input
+          id="customCategory"
+          name="customCategory"
+          label="Nueva categoría"
+          value={formData.customCategory}
+          onChange={handleChange}
+          placeholder="Ej. Universidad, Delivery, Pasajes"
+          required
+          type="text"
+        />
+      )}
 
       {errorMessage && <p className="form-error-message">{errorMessage}</p>}
 
