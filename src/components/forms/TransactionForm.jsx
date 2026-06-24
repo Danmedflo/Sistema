@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import Input from "../ui/Input";
 import Select from "../ui/Select";
@@ -16,50 +16,40 @@ const initialState = {
   customCategory: "",
 };
 
+function getInitialFormState(initialData) {
+  if (!initialData) return initialState;
+
+  const type = initialData.type || "Gasto";
+
+  const categoriesByType = mockCategories
+    .filter((item) => item.type === type)
+    .map((item) => item.name);
+
+  const isPredefinedCategory = categoriesByType.includes(initialData.category);
+
+  return {
+    description: initialData.description || "",
+    amount: initialData.amount ?? "",
+    date: initialData.date || "",
+    type,
+    category: isPredefinedCategory
+      ? initialData.category
+      : CUSTOM_CATEGORY_VALUE,
+    customCategory: isPredefinedCategory ? "" : initialData.category || "",
+  };
+}
+
 function TransactionForm({
   onSubmitTransaction,
   onClose,
   initialData = null,
   submitLabel = "Guardar movimiento",
 }) {
-  const [formData, setFormData] = useState(initialState);
+  const [formData, setFormData] = useState(() =>
+    getInitialFormState(initialData)
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const predefinedCategoryNames = useMemo(() => {
-    return mockCategories
-      .filter((item) => item.type === formData.type)
-      .map((item) => item.name);
-  }, [formData.type]);
-
-  useEffect(() => {
-    if (initialData) {
-      const type = initialData.type || "Gasto";
-
-      const categoriesByType = mockCategories
-        .filter((item) => item.type === type)
-        .map((item) => item.name);
-
-      const isPredefinedCategory = categoriesByType.includes(
-        initialData.category
-      );
-
-      setFormData({
-        description: initialData.description || "",
-        amount: initialData.amount ?? "",
-        date: initialData.date || "",
-        type,
-        category: isPredefinedCategory
-          ? initialData.category
-          : CUSTOM_CATEGORY_VALUE,
-        customCategory: isPredefinedCategory
-          ? ""
-          : initialData.category || "",
-      });
-    } else {
-      setFormData(initialState);
-    }
-  }, [initialData]);
 
   const categoryOptions = useMemo(() => {
     const filtered = mockCategories.filter(

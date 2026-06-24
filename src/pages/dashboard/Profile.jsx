@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";  
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import Select from "../../components/ui/Select";
@@ -64,25 +64,21 @@ function Profile() {
     fetchProfile();
   }, [user?.id, user?.email, user?.user_metadata?.full_name]);
 
-  const joinedAt = useMemo(() => {
-    if (!user?.created_at) return "No disponible";
-
-    return new Date(user.created_at).toLocaleDateString("es-PE", {
+  const joinedAt = user?.created_at
+  ? new Date(user.created_at).toLocaleDateString("es-PE", {
       year: "numeric",
       month: "long",
       day: "numeric",
-    });
-  }, [user?.created_at]);
+    })
+  : "No disponible";
 
-  const updatedAt = useMemo(() => {
-    if (!profile?.updated_at) return "No disponible";
-
-    return new Date(profile.updated_at).toLocaleDateString("es-PE", {
+  const updatedAt = profile?.updated_at
+  ? new Date(profile.updated_at).toLocaleDateString("es-PE", {
       year: "numeric",
       month: "long",
       day: "numeric",
-    });
-  }, [profile?.updated_at]);
+    })
+  : "No disponible";
 
   const displayName =
     formData.full_name || user?.email?.split("@")[0] || "Usuario";

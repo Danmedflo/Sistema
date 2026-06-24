@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import { createContext, useEffect, useState } from "react";
 
 export const UIContext = createContext();

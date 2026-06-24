@@ -31,7 +31,11 @@ export function groupTransactionsByMonth(transactions) {
 
   return Array.from(monthMap.values())
     .sort((a, b) => a.dateOrder - b.dateOrder)
-    .map(({ key, dateOrder, ...rest }) => rest);
+    .map((item) => ({
+      month: item.month,
+      income: item.income,
+      expense: item.expense,
+    }));
 }
 
 export function groupExpensesByCategory(transactions) {
