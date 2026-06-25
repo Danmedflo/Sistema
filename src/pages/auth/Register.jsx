@@ -1,11 +1,19 @@
+import RegisterForm from "../../components/forms/RegisterForm";
+
 function Register() {
   return (
-    <section className="auth-page">
-      <div className="auth-box single-box">
-        <h1>Registro</h1>
-        <p>Esta pantalla la armaremos después.</p>
-      </div>
-    </section>
+    <main className="auth-page">
+      <section className="auth-box">
+        <div className="auth-left">
+          <h1>FinControl</h1>
+          <p>Crea tu cuenta y empieza a administrar tus ingresos y gastos.</p>
+        </div>
+
+        <div className="auth-right">
+          <RegisterForm />
+        </div>
+      </section>
+    </main>
   );
 }
 

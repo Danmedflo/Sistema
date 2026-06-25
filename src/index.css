@@ -1036,3 +1036,28 @@ body.dark-theme .custom-input:disabled {
   background: #111827;
   color: #94a3b8;
 }
+
+.auth-link-text {
+  margin-top: 18px;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.auth-link-text a {
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-link-text a:hover {
+  text-decoration: underline;
+}
+
+body.dark-theme .auth-link-text {
+  color: #94a3b8;
+}
+
+body.dark-theme .auth-link-text a {
+  color: #60a5fa;
+}

@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import useAuth from "../../hooks/useAuth";
+import Input from "../ui/Input";
+import Button from "../ui/Button";
 import Toast from "../ui/Toast";
 
 function LoginForm() {
@@ -41,7 +44,10 @@ function LoginForm() {
     setErrorMessage("");
     setIsSubmitting(true);
 
-    const { error } = await signIn(formData);
+    const { error } = await signIn({
+      email: formData.email.trim(),
+      password: formData.password,
+    });
 
     if (error) {
       const message = error.message || "No se pudo iniciar sesión.";
@@ -52,6 +58,7 @@ function LoginForm() {
     }
 
     showToast("Inicio de sesión correcto");
+
     setTimeout(() => {
       navigate("/dashboard");
     }, 400);
@@ -59,45 +66,41 @@ function LoginForm() {
 
   return (
     <>
-      <Toast message={toast.message} type={toast.type} />
+      {toast.message && <Toast message={toast.message} type={toast.type} />}
 
       <form className="login-form" onSubmit={handleSubmit}>
         <h2>Iniciar sesión</h2>
         <p className="login-subtext">Bienvenido de nuevo</p>
 
-        <div className="form-group">
-          <label htmlFor="email">Correo electrónico</label>
-          <input
-            id="email"
-            type="email"
-            placeholder="ejemplo@correo.com"
-            required
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
+        <Input
+          id="email"
+          label="Correo electrónico"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="ejemplo@correo.com"
+          required
+        />
 
-        <div className="form-group">
-          <label htmlFor="password">Contraseña</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="********"
-            required
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
+        <Input
+          id="password"
+          label="Contraseña"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="********"
+          required
+        />
 
-        {errorMessage && (
-          <p style={{ color: "#dc2626", marginBottom: "12px", fontWeight: 600 }}>
-            {errorMessage}
-          </p>
-        )}
+        {errorMessage && <p className="form-error-message">{errorMessage}</p>}
 
-        <button type="submit" className="primary-btn" disabled={isSubmitting}>
+        <Button type="submit" fullWidth>
           {isSubmitting ? "Ingresando..." : "Ingresar"}
-        </button>
+        </Button>
+
+        <p className="auth-link-text">
+          ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
+        </p>
       </form>
     </>
   );
