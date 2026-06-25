@@ -1,11 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 
 export const UIContext = createContext();
 
 export function UIProvider({ children }) {
-  const [theme, setTheme] = useState(() => {
+  const [theme, setThemeState] = useState(() => {
     return localStorage.getItem("theme") || "light";
   });
 
@@ -17,27 +17,44 @@ export function UIProvider({ children }) {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
+  useEffect(() => {
+    document.body.classList.toggle("sidebar-lock", isSidebarOpen);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev);
-  };
+    return () => {
+      document.body.classList.remove("sidebar-lock");
+    };
+  }, [isSidebarOpen]);
 
-  const closeSidebar = () => {
+  const setTheme = useCallback((newTheme) => {
+    setThemeState(newTheme);
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    setThemeState((prev) => (prev === "light" ? "dark" : "light"));
+  }, []);
+
+  const openSidebar = useCallback(() => {
+    setIsSidebarOpen(true);
+  }, []);
+
+  const closeSidebar = useCallback(() => {
     setIsSidebarOpen(false);
-  };
+  }, []);
+
+  const toggleSidebar = useCallback(() => {
+    setIsSidebarOpen((prev) => !prev);
+  }, []);
 
   return (
     <UIContext.Provider
       value={{
         theme,
         setTheme,
-        toggleTheme,
         isSidebarOpen,
-        toggleSidebar,
+        toggleTheme,
+        openSidebar,
         closeSidebar,
+        toggleSidebar,
       }}
     >
       {children}

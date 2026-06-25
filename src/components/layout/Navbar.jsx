@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import {
-  FaMoon,
-  FaSun,
-  FaRightFromBracket,
   FaBars,
+  FaMoon,
+  FaRightFromBracket,
+  FaSun,
 } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
-import useTheme from "../../hooks/useTheme";
+
 import useAuth from "../../hooks/useAuth";
+import useTheme from "../../hooks/useTheme";
 import { getProfile } from "../../services/profileService";
 
 const pageMap = {
@@ -40,6 +41,7 @@ const pageMap = {
 function Navbar() {
   const { theme, toggleTheme, toggleSidebar } = useTheme();
   const { user, signOut } = useAuth();
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -81,7 +83,12 @@ function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar-left">
-        <button className="menu-toggle-btn" onClick={toggleSidebar}>
+        <button
+          type="button"
+          className="menu-toggle-btn"
+          onClick={toggleSidebar}
+          aria-label="Abrir menú"
+        >
           <FaBars />
         </button>
 
@@ -92,19 +99,30 @@ function Navbar() {
       </div>
 
       <div className="navbar-actions">
-        <button className="theme-toggle-btn" onClick={toggleTheme}>
+        <button
+          type="button"
+          className="theme-toggle-btn"
+          onClick={toggleTheme}
+          aria-label="Cambiar tema"
+        >
           {theme === "light" ? <FaMoon /> : <FaSun />}
         </button>
 
         <div className="navbar-user">
           <div className="navbar-avatar">{initial}</div>
+
           <div className="navbar-user-info">
             <strong>{displayName}</strong>
             <p>{user?.email || "Usuario autenticado"}</p>
           </div>
         </div>
 
-        <button className="logout-btn" onClick={handleLogout}>
+        <button
+          type="button"
+          className="logout-btn"
+          onClick={handleLogout}
+          aria-label="Cerrar sesión"
+        >
           <FaRightFromBracket />
         </button>
       </div>

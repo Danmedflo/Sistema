@@ -1,13 +1,14 @@
 import { NavLink } from "react-router-dom";
 import {
-  FaHouse,
-  FaMoneyBillTransfer,
   FaChartPie,
-  FaLayerGroup,
-  FaUser,
   FaGear,
+  FaHouse,
+  FaLayerGroup,
+  FaMoneyBillTransfer,
+  FaUser,
   FaXmark,
 } from "react-icons/fa6";
+
 import useTheme from "../../hooks/useTheme";
 
 function Sidebar() {
@@ -27,9 +28,17 @@ function Sidebar() {
   ];
 
   return (
-    <aside className={`sidebar ${isSidebarOpen ? "sidebar-open" : ""}`}>
+    <aside
+      className={`sidebar ${isSidebarOpen ? "sidebar-open" : ""}`}
+      aria-label="Menú principal"
+    >
       <div className="sidebar-top-mobile">
-        <button className="sidebar-close-btn" onClick={closeSidebar}>
+        <button
+          type="button"
+          className="sidebar-close-btn"
+          onClick={closeSidebar}
+          aria-label="Cerrar menú"
+        >
           <FaXmark />
         </button>
       </div>
