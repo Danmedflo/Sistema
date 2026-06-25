@@ -1,17 +1,24 @@
-# Sistema de Gestión de Gastos - FinControl
+# FinControl - Sistema de Gestión de Gastos
 
-## Descripción del proyecto
+## Descripción
 
-FinControl es una aplicación web desarrollada con React y Vite que permite gestionar ingresos, gastos y reportes financieros personales. El sistema permite registrar transacciones, editar movimientos, eliminar registros y visualizar información financiera desde un dashboard.
+FinControl es una aplicación web desarrollada con React y Vite para la gestión de ingresos, gastos y reportes financieros personales. El sistema permite registrar usuarios, iniciar sesión, administrar transacciones, visualizar reportes y controlar la información financiera desde un panel principal.
 
-El proyecto también incorpora herramientas modernas de desarrollo como Docker, integración continua con GitHub Actions, sistema de tickets mediante GitHub Issues y despliegue continuo con Vercel.
+El proyecto también implementa herramientas modernas de desarrollo como Docker, GitHub Actions para integración continua, Vercel para despliegue continuo y GitHub Issues para el seguimiento de tareas.
+
+---
+
+## URL del sistema desplegado
+
+https://sistema-eight-blue.vercel.app
 
 ---
 
 ## Funcionalidades principales
 
-* Registro de usuario.
+* Registro de usuarios.
 * Inicio de sesión.
+* Rutas protegidas para usuarios autenticados.
 * Dashboard principal.
 * Registro de ingresos y gastos.
 * Edición de transacciones.
@@ -20,8 +27,9 @@ El proyecto también incorpora herramientas modernas de desarrollo como Docker, 
 * Categoría personalizada al registrar una transacción.
 * Reportes financieros.
 * Perfil de usuario.
-* Configuración visual.
-* Rutas protegidas para usuarios autenticados.
+* Configuración de tema claro y oscuro.
+* Diseño responsive para escritorio, tablet y celular.
+* Menú hamburguesa funcional en vista móvil.
 
 ---
 
@@ -37,30 +45,43 @@ El proyecto también incorpora herramientas modernas de desarrollo como Docker, 
 * Docker
 * GitHub Actions
 * Vercel
+* GitHub Issues
 
 ---
 
 ## Instalación del proyecto
 
-Para instalar las dependencias del proyecto, ejecutar:
+Clonar el repositorio:
+
+```bash
+git clone https://github.com/Danmedflo/Sistema.git
+```
+
+Entrar a la carpeta del proyecto:
+
+```bash
+cd Sistema
+```
+
+Instalar dependencias:
 
 ```bash
 npm install
 ```
 
-Para iniciar el proyecto en modo desarrollo:
+Ejecutar el proyecto en modo desarrollo:
 
 ```bash
 npm run dev
 ```
 
-Para compilar el proyecto para producción:
+Compilar el proyecto para producción:
 
 ```bash
 npm run build
 ```
 
-Para ejecutar la revisión de código:
+Ejecutar revisión de código:
 
 ```bash
 npm run lint
@@ -70,7 +91,7 @@ npm run lint
 
 ## Variables de entorno
 
-El proyecto utiliza variables de entorno para conectarse con Supabase.
+El proyecto utiliza Supabase como servicio de autenticación y base de datos.
 
 Crear un archivo `.env` en la raíz del proyecto tomando como referencia el archivo `.env.example`.
 
@@ -85,7 +106,7 @@ Por seguridad, el archivo `.env` no se sube al repositorio.
 
 ---
 
-## Uso de Docker
+## Docker
 
 El proyecto cuenta con soporte para Docker mediante los archivos:
 
@@ -94,54 +115,39 @@ Dockerfile
 .dockerignore
 ```
 
-Para construir la imagen Docker:
+Construir la imagen Docker:
 
 ```bash
 docker build -t sistema-financiero .
 ```
 
-Para ejecutar el contenedor:
+Ejecutar el contenedor:
 
 ```bash
 docker run -p 3000:80 sistema-financiero
 ```
 
-Luego abrir en el navegador:
+Abrir en el navegador:
 
 ```txt
 http://localhost:3000
 ```
 
-Docker permite ejecutar el proyecto en un contenedor, evitando problemas de configuración entre diferentes equipos.
-
----
-
-## Sistema de tickets
-
-Se utilizó GitHub Issues para registrar y controlar las tareas pendientes del proyecto.
-
-Tickets implementados:
-
-1. Agregar Docker al proyecto React + Vite.
-2. Configurar integración continua con GitHub Actions.
-3. Configurar despliegue continuo del sistema.
-4. Actualizar README del proyecto.
-
-Cada ticket cuenta con descripción, tareas, prioridad y estado. Al finalizar una tarea, se agrega un comentario con el resultado y se cierra el issue.
+Docker permite ejecutar la aplicación en un contenedor, evitando problemas de configuración entre diferentes equipos.
 
 ---
 
 ## Integración continua
 
-El proyecto utiliza GitHub Actions para ejecutar un pipeline de integración continua.
+El proyecto utiliza GitHub Actions para validar automáticamente el código cada vez que se realiza un push o pull request hacia la rama principal.
 
-El archivo de configuración se encuentra en:
+El workflow se encuentra en:
 
 ```txt
 .github/workflows/ci.yml
 ```
 
-El pipeline ejecuta automáticamente:
+El pipeline ejecuta:
 
 ```bash
 npm ci
@@ -149,7 +155,7 @@ npm run lint
 npm run build
 ```
 
-Esto permite validar el proyecto cada vez que se realiza un push o pull request hacia la rama principal.
+Esto permite detectar errores de instalación, revisión de código o compilación antes de considerar válido un cambio.
 
 ---
 
@@ -157,36 +163,50 @@ Esto permite validar el proyecto cada vez que se realiza un push o pull request 
 
 El sistema fue desplegado en Vercel.
 
-URL del proyecto:
-
-```txt
-https://sistema-eight-blue.vercel.app
-```
-
-El despliegue continuo permite que la aplicación se actualice automáticamente cada vez que se realiza un push a la rama `main`.
-
-Configuración usada en Vercel:
+Configuración utilizada:
 
 * Framework: Vite
 * Build Command: npm run build
 * Output Directory: dist
 * Variables de entorno configuradas en Vercel
 
----
-
-## Evidencias de implementación
-
-Durante el desarrollo se implementaron:
-
-* Dockerfile y .dockerignore.
-* Pipeline de GitHub Actions.
-* Despliegue automático en Vercel.
-* Tickets de seguimiento en GitHub Issues.
-* Variables de entorno protegidas.
-* Archivo .env.example como referencia.
+Cada vez que se realiza un push a la rama principal, Vercel genera automáticamente un nuevo despliegue.
 
 ---
 
-## Estado del proyecto
+## Sistema de tickets
 
-El proyecto se encuentra funcional y desplegado. Actualmente cuenta con autenticación, gestión de transacciones, reportes, Docker, integración continua y despliegue continuo.
+Se utilizó GitHub Issues para registrar, controlar y cerrar tareas del proyecto.
+
+Tickets trabajados:
+
+1. Agregar Docker al proyecto React + Vite.
+2. Configurar integración continua con GitHub Actions.
+3. Configurar despliegue continuo del sistema.
+4. Actualizar README del proyecto.
+
+Cada ticket contiene una descripción, tareas, prioridad y estado. Al finalizar cada implementación, se agregó un comentario de cierre con el resultado obtenido.
+
+---
+
+## Mejoras responsive
+
+Se optimizaron los estilos globales del proyecto para mejorar la experiencia en diferentes dispositivos.
+
+Mejoras realizadas:
+
+* Adaptación del login y registro para celular.
+* Ajuste responsive del dashboard.
+* Corrección del menú hamburguesa.
+* Sidebar funcional en vista móvil.
+* Cierre del menú al tocar fuera o cambiar de ruta.
+* Tablas con desplazamiento horizontal en pantallas pequeñas.
+* Modales adaptados para celular.
+* Mejoras en tema claro y oscuro.
+* Uso de variables CSS para colores, bordes, sombras y fondos.
+
+---
+
+## Estado actual del proyecto
+
+El proyecto se encuentra funcional, desplegado y documentado. Actualmente cuenta con autenticación, registro de usuarios, gestión de transacciones, reportes, diseño responsive, Docker, integración continua, despliegue continuo y seguimiento de tareas mediante tickets.
